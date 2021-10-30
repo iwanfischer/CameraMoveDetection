@@ -1,8 +1,9 @@
 #from skimage import io
-#import numpy as np
+import numpy as np
+from PIL import Image
 #import matplotlib.pyplot as plt
-#from skimage import data, draw
-#from skimage.registration import phase_cross_correlation
+from skimage import data, draw
+from skimage.registration import phase_cross_correlation
 #from scipy import ndimage as ndi
 
 #from imutils.video import FileVideoStream
@@ -18,12 +19,24 @@
 #print(f'Detected pixel offset (row, col): {detected_shift}')
 
 import av
+from av import VideoFrame
+#VideoFrame.
 v = av.open('datasets/g.mp4')
+prev_image = None
 for packet in v.demux():
 	for frame in packet.decode():
-		if frame.type == 'video':
-			img = frame.to_image()  # PIL/Pillow image
-			arr = np.asarray(img)  # numpy array
+		if frame is VideoFrame:
+			#img = frame.to_image()  # PIL/Pillow image
+			ndarray = frame.to_ndarray()
+			if(prev_image == None):
+				prev_image = ndarray
+				continue
+			else:
+				print(phase_cross_correlation(ndarray,prev_image))
+				prev_image = ndarray
+			#arr = np.asarray(img)  # numpy array
+
+	#break
 			# Do something!
 
 #def takeFirstFrameAsEtalon(filename):
