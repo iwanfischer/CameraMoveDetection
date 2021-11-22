@@ -1,4 +1,4 @@
-#from skimage import io
+from skimage import io
 import numpy as np
 from PIL import Image
 #import matplotlib.pyplot as plt
@@ -11,29 +11,36 @@ from skimage.registration import phase_cross_correlation
 #from math import sqrt
 #import imutils
 #import time
-#import cv2
+import cv2
 
-#image = io.imread("datasets/xNFfw.png")
-#offset_image = io.imread("datasets/xNFfw1.png")
-#detected_shift = phase_cross_correlation(image, offset_image)
-#print(f'Detected pixel offset (row, col): {detected_shift}')
+image = io.imread("datasets/xNFfw.png")
+offset_image = io.imread("datasets/xNFfw1.png")
+detected_shift = phase_cross_correlation(image, offset_image)
 
-import av
-from av import VideoFrame
-#VideoFrame.
-v = av.open('datasets/g.mp4')
-prev_image = None
-for packet in v.demux():
-	for frame in packet.decode():
-		if frame is VideoFrame:
-			#img = frame.to_image()  # PIL/Pillow image
-			ndarray = frame.to_ndarray()
-			if(prev_image == None):
-				prev_image = ndarray
-				continue
-			else:
-				print(phase_cross_correlation(ndarray,prev_image))
-				prev_image = ndarray
+print(cv2.getBuildInformation())
+import cv2
+import numpy as np
+img1 = np.float32(cv2.imread("datasets/xNFfw.png",2))
+img2 = np.float32(cv2.imread("datasets/xNFfw1.png",2))
+detected_shift1 = cv2.phaseCorrelate(img1,img2)
+print(f'Detected pixel offsets (row, col): {detected_shift} | {detected_shift1}')
+
+#import av
+#from av import VideoFrame
+##VideoFrame.
+#v = av.open('datasets/g.mp4')
+#prev_image = None
+#for packet in v.demux():
+#	for frame in packet.decode():
+#		if frame is VideoFrame:
+#			#img = frame.to_image()  # PIL/Pillow image
+#			ndarray = frame.to_ndarray()
+#			if(prev_image == None):
+#				prev_image = ndarray
+#				continue
+#			else:
+#				print(phase_cross_correlation(ndarray,prev_image))
+#				prev_image = ndarray
 			#arr = np.asarray(img)  # numpy array
 
 	#break
